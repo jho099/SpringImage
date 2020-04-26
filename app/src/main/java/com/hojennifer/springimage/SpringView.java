@@ -46,16 +46,14 @@ public class SpringView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        paint.setColor(Color.YELLOW);
-        canvas.drawCircle(300, centerY, 100, paint);
-        paint.setColor(Color.GREEN);
-        canvas.drawLine(180, 200, 820, 200, paint);
+        //paint.setColor(Color.YELLOW);
+        //canvas.drawCircle(300, centerY, 100, paint);
 
 
         paint.setColor(Color.WHITE);
-        canvas.drawCircle(600, centerY, 110, paint);
+        canvas.drawCircle(500, centerY, 90, paint);
         paint.setColor(Color.RED);
-        canvas.drawCircle(600, centerY, 100, paint);
+        canvas.drawCircle(500, centerY, 80, paint);
 
 
         //centerY += step;
@@ -64,9 +62,11 @@ public class SpringView extends View {
         paint.setColor(0xFF7BB369);
         canvas.drawRect(0, height - 200, width, height, paint);
 
-        if(Math.abs(treeOffset) > 30){
-            direction *= -1;
-
+        if(treeOffset > 30 && direction == 1){
+            direction = -1;
+        }
+        else if(treeOffset < -30 && direction == -1){
+            direction = 1;
         }
         treeOffset += direction * rand.nextInt(7);
 
@@ -80,10 +80,11 @@ public class SpringView extends View {
 
         paint.setColor(0xFF6A4110);
         Path path = new Path(); //trunk
-        path.moveTo(200 + treeOffset, 250);
+        path.moveTo(200 + treeOffset, 200);
+      //  path.lineTo()
         path.lineTo(180, height - 270);
         path.lineTo(220, height - 270);
-        path.lineTo(200 + treeOffset, 300);
+        path.lineTo(200 + treeOffset, 200);
         path.close();
         canvas.drawPath(path, paint);
         //centerTree += treeOffset;
