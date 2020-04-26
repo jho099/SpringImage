@@ -6,10 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <SurfaceView
+    <com.hojennifer.springimage.SpringView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/springSV"
-        ></SurfaceView>
+        android:background="#87CEEB"
+        ></com.hojennifer.springimage.SpringView>
 
 </LinearLayout>
