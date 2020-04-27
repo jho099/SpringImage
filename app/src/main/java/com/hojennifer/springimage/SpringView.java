@@ -22,6 +22,12 @@ public class SpringView extends View {
     int direction = 1;
     Random rand = new Random();
 
+    int left = 400;
+    int right = 500;
+    int top = 300;
+    int bottom;
+
+
     public SpringView(Context context, AttributeSet attrs) {
         super(context, attrs);
         paint = new Paint();
@@ -35,6 +41,7 @@ public class SpringView extends View {
         super.onLayout(changed, left, top, right, bottom);
         width = right - left;
         height = bottom - top;
+
     }
 
     @Override
@@ -55,58 +62,66 @@ public class SpringView extends View {
         paint.setColor(Color.RED);
         canvas.drawCircle(500, centerY, 80, paint);
 
-
+        bottom = (int) (height * 0.8);
         //centerY += step;
-        paint.setColor(0xFF6A4110);
-        canvas.drawRect(0, height - 270, width, height - 200, paint);
-        paint.setColor(0xFF7BB369);
-        canvas.drawRect(0, height - 200, width, height, paint);
+        paint.setColor(0xFF6A4110);//brown
+        canvas.drawRect(0, bottom, width, height, paint);
+        paint.setColor(0xFF7BB369);//green
+        canvas.drawRect(0, (int)(height * 0.85) , width, height, paint);
 
-        if(treeOffset > 30 && direction == 1){
+
+
+        if(treeOffset > 25 && direction == 1){
             direction = -1;
         }
-        else if(treeOffset < -30 && direction == -1){
+        else if(treeOffset < -25 && direction == -1){
             direction = 1;
         }
         treeOffset += direction * rand.nextInt(7);
 
+        int botTree = (bottom - top) / 2 + top;
         paint.setColor(0xFF228C22);
-        canvas.drawOval(100 + treeOffset, 100, 300 + treeOffset, 500, paint); //tree leaves
+        canvas.drawOval(left + treeOffset, top, right + treeOffset, botTree, paint); //tree leaves
         //leavesLeft += treeOffset;
         //leavesRight += treeOffset;
 
         int groundY = 270;
-        int trunkHeight = height - groundY - 250;
-
+        int trunkHeight = (int) ((bottom  - top) * 0.85);
+        int trunkTop = bottom - trunkHeight;
+        int trunkMiddle = (left + right) / 2;
+        int trunkWidth = (right - left) / 9;
         paint.setColor(0xFF6A4110);
         Path path = new Path(); //trunk
-        path.moveTo(200 + treeOffset, 200);
+        path.moveTo(trunkMiddle + treeOffset, trunkTop);
       //  path.lineTo()
-        path.lineTo(180, height - 270);
-        path.lineTo(220, height - 270);
-        path.lineTo(200 + treeOffset, 200);
+        path.lineTo(trunkMiddle - trunkWidth, bottom);
+        path.lineTo(trunkMiddle + trunkWidth, bottom);
+        path.lineTo(trunkMiddle + treeOffset, trunkTop);
         path.close();
         canvas.drawPath(path, paint);
         //centerTree += treeOffset;
 
         //int shift =  treeOffset / (height - 270 - 200) ;
 
+        int topOfRBranch = (int)((botTree - top) * 0.23) + top; //top of right branch
+        int halfBranchWidth = (right - left) / 11;
+        int branchOffset = (int)(treeOffset * ((float)(bottom-((botTree+topOfRBranch)/2)) / trunkHeight));
 
-        int branchOffset = (int)(treeOffset * ((float)(height-groundY-350) / trunkHeight));
 
         path = new Path();//branch
-        path.moveTo(250 + branchOffset, 205);
-        path.lineTo(200 + branchOffset, 340);
-        path.lineTo(200 + branchOffset, 360);
+        path.moveTo(right - (right - left) / 4  + branchOffset, topOfRBranch);
+        path.lineTo(trunkMiddle + branchOffset, (botTree + topOfRBranch) / 2 - halfBranchWidth);
+        path.lineTo(trunkMiddle + branchOffset, (botTree + topOfRBranch) / 2 + halfBranchWidth);
         path.close();
         canvas.drawPath(path, paint);
 
+        int topOfLBranch = (int)((botTree - top) * 0.53) + top; //top of left branch
 
-        branchOffset = (int)(treeOffset * ((float)(height-groundY-420) / trunkHeight));
+        branchOffset = (int)(treeOffset * ((float)(bottom-((botTree+topOfLBranch)/2)) / trunkHeight));
         path = new Path();//branch
-        path.moveTo(200 + branchOffset, 410);
-        path.lineTo(150 + branchOffset, 285);
-        path.lineTo(200 + branchOffset, 430);
+        path.moveTo(trunkMiddle + branchOffset, (botTree - trunkTop) * 3 / 4 + trunkTop - halfBranchWidth);
+        path.lineTo(left + (right - left) / 4 + branchOffset, topOfLBranch);
+        path.lineTo(trunkMiddle + branchOffset, (botTree - trunkTop) * 3 / 4 + trunkTop + halfBranchWidth);
         path.close();
         canvas.drawPath(path, paint);
 
