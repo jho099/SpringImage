@@ -10,6 +10,7 @@ import java.util.Random;
 public class Tree {
     int left, right, top, bottom, treeOffset, botTree, direction;
     int color;
+
     Random rand = new Random();
     public Tree(int left, int top, int right, int bottom, int color){
         this.left = left;
@@ -64,6 +65,8 @@ public class Tree {
 
         return path;
     }
+
+
 
     public void windBlow(){
         if(treeOffset > 25 && direction == 1){

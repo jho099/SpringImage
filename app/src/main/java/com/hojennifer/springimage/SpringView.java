@@ -10,6 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class SpringView extends View {
@@ -18,10 +19,12 @@ public class SpringView extends View {
     int width, height;
     int centerY = 200;
     int step = 20;
+    int numTrees = 5;
+
+    int[] greens = {0xFF228C22, 0xFF67A239, 0xFF10921B, 0xFF97E378, 0xFF1E6B33};
 
     int ground;
-    Tree tree1;
-    Tree tree2;
+    ArrayList<Tree> trees = new ArrayList<Tree>();
 
 
     public SpringView(Context context, AttributeSet attrs) {
@@ -38,8 +41,21 @@ public class SpringView extends View {
         width = right - left;
         height = bottom - top;
         ground = (int) (height * 0.8);
-        tree1 = new Tree(200, 300, 300, ground, 0xFF228C22);
-        tree2 = new Tree(400, 100, 600, ground, 0xFF67A239);
+        int treeCount = numTrees;
+        if(width > height){
+            treeCount *= 2;
+
+        }
+
+
+        int w = width / treeCount;
+        trees.clear();
+        for(int i = 0; i < treeCount; i++){
+            trees.add(new Tree(i*w, (int)(height*0.3), i*w+w, ground, greens[i % greens.length]));
+        }
+
+
+
     }
 
     @Override
@@ -65,29 +81,21 @@ public class SpringView extends View {
         paint.setColor(0xFF6A4110);//brown
         canvas.drawRect(0, ground, width, height, paint);
         paint.setColor(0xFF7BB369);//green
-        canvas.drawRect(0, ground + 40 , width, height, paint);
+        canvas.drawRect(0, (int)(ground * 0.85), width, height, paint);
 
 
+        for(Tree tree : trees){
+            tree.windBlow();
 
-        tree1.windBlow();
+            //LEAVES
+            paint.setColor(tree.getColor());
+            canvas.drawOval(tree.getLeaves(), paint); //tree leaves
 
-        //LEAVES
-        paint.setColor(tree1.getColor());
-        canvas.drawOval(tree1.getLeaves(), paint); //tree leaves
+            //BRANCH + TRUNK
+            paint.setColor(0xFF6A4110);
+            canvas.drawPath(tree.getTrunkAndBranches(), paint);
+        }
 
-        //BRANCH + TRUNK
-        paint.setColor(0xFF6A4110);
-        canvas.drawPath(tree1.getTrunkAndBranches(), paint);
-//-----------------------------------------------//
-        tree2.windBlow();
-
-        //LEAVES
-        paint.setColor(tree2.getColor());
-        canvas.drawOval(tree2.getLeaves(), paint); //tree leaves
-
-        //BRANCH + TRUNK
-        paint.setColor(0xFF6A4110);
-        canvas.drawPath(tree2.getTrunkAndBranches(), paint);
 
 
         postInvalidateDelayed(50);
