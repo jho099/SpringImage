@@ -86,6 +86,9 @@ public class SpringView extends View {
 
         for(Tree tree : trees){
             tree.windBlow();
+            canvas.save();
+            canvas.rotate(tree.treeOffset, tree.getTrunkX(), tree.bottom);
+
 
             //LEAVES
             paint.setColor(tree.getColor());
@@ -94,6 +97,7 @@ public class SpringView extends View {
             //BRANCH + TRUNK
             paint.setColor(0xFF6A4110);
             canvas.drawPath(tree.getTrunkAndBranches(), paint);
+            canvas.restore();
         }
 
 

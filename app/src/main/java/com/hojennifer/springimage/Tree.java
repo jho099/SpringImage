@@ -1,6 +1,7 @@
 package com.hojennifer.springimage;
 
 
+import android.graphics.Canvas;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -25,41 +26,44 @@ public class Tree {
     public RectF getLeaves(){
         return new RectF(left + treeOffset, top, right + treeOffset, botTree);
     }
+    public int getTrunkX() {
+        return (left + right) / 2;
+    }
     public Path getTrunkAndBranches(){
         int trunkHeight = (int) ((bottom  - top) * 0.85);
         int trunkTop = bottom - trunkHeight;
         int trunkMiddle = (left + right) / 2;
         int trunkWidth = (right - left) / 9;
         Path path = new Path();
-        path.moveTo(trunkMiddle + treeOffset, trunkTop);
+        path.moveTo(trunkMiddle, trunkTop);
         path.lineTo(trunkMiddle - trunkWidth, bottom);
         path.lineTo(trunkMiddle + trunkWidth, bottom);
-        path.lineTo(trunkMiddle + treeOffset, trunkTop);
+        path.lineTo(trunkMiddle, trunkTop);
 
-        path.moveTo(trunkMiddle + treeOffset, trunkTop);
+        path.moveTo(trunkMiddle, trunkTop);
         path.lineTo(trunkMiddle - trunkWidth, bottom);
         path.lineTo(trunkMiddle + trunkWidth, bottom);
-        path.lineTo(trunkMiddle + treeOffset, trunkTop);
+        path.lineTo(trunkMiddle, trunkTop);
 
 
 
         int topOfRBranch = (int)((botTree - top) * 0.23) + top; //top of right branch
         int halfBranchWidth = (right - left) / 11;
-        int branchOffset = (int)(treeOffset * ((float)(bottom-((botTree+topOfRBranch)/2)) / trunkHeight));
+        //int branchOffset = (int)(treeOffset * ((float)(bottom-((botTree+topOfRBranch)/2)) / trunkHeight));
 
-        path.moveTo(trunkMiddle + branchOffset, (botTree + topOfRBranch) / 2 - halfBranchWidth);
-        path.lineTo(right - (right - left) / 4  + branchOffset, topOfRBranch);
-        path.lineTo(trunkMiddle + branchOffset, (botTree + topOfRBranch) / 2 + halfBranchWidth);
-        path.lineTo(trunkMiddle + branchOffset, (botTree + topOfRBranch) / 2 - halfBranchWidth);
+        path.moveTo(trunkMiddle, (botTree + topOfRBranch) / 2 - halfBranchWidth);
+        path.lineTo(right - (right - left) / 4, topOfRBranch);
+        path.lineTo(trunkMiddle, (botTree + topOfRBranch) / 2 + halfBranchWidth);
+        path.lineTo(trunkMiddle, (botTree + topOfRBranch) / 2 - halfBranchWidth);
 
 
         int topOfLBranch = (int)((botTree - top) * 0.53) + top; //top of left branch
 
-        branchOffset = (int)(treeOffset * ((float)(bottom-((botTree+topOfLBranch)/2)) / trunkHeight));
-        path.moveTo(trunkMiddle + branchOffset, (botTree - trunkTop) * 3 / 4 + trunkTop - halfBranchWidth);
-        path.lineTo(left + (right - left) / 4 + branchOffset, topOfLBranch);
-        path.lineTo(trunkMiddle + branchOffset, (botTree - trunkTop) * 3 / 4 + trunkTop + halfBranchWidth);
-        path.lineTo(trunkMiddle + branchOffset, (botTree - trunkTop) * 3 / 4 + trunkTop - halfBranchWidth);
+        //branchOffset = (int)(treeOffset * ((float)(bottom-((botTree+topOfLBranch)/2)) / trunkHeight));
+        path.moveTo(trunkMiddle, (botTree - trunkTop) * 3 / 4 + trunkTop - halfBranchWidth);
+        path.lineTo(left + (right - left) / 4, topOfLBranch);
+        path.lineTo(trunkMiddle, (botTree - trunkTop) * 3 / 4 + trunkTop + halfBranchWidth);
+        path.lineTo(trunkMiddle, (botTree - trunkTop) * 3 / 4 + trunkTop - halfBranchWidth);
         //path.lineTo(trunkMiddle + treeOffset, trunkTop);
 
 
@@ -68,14 +72,15 @@ public class Tree {
 
 
 
-    public void windBlow(){
-        if(treeOffset > 25 && direction == 1){
+    public void windBlow(){ //IN DEGREES
+
+        if(treeOffset > 3 && direction == 1){
             direction = -1;
         }
-        else if(treeOffset < -25 && direction == -1){
+        else if(treeOffset < -3 && direction == -1){
             direction = 1;
         }
-        treeOffset += direction * rand.nextInt(7);
+        treeOffset += direction * rand.nextInt(2);
     }
     public int getColor(){
         return color;
